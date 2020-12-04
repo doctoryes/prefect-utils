@@ -203,7 +203,6 @@ def load_ga_data_to_snowflake(
 @task
 def load_s3_data_to_snowflake(
     date: str,
-    date_property: str,
     sf_credentials: dict,
     sf_database: str,
     sf_schema: str,
@@ -215,6 +214,7 @@ def load_s3_data_to_snowflake(
     sf_file_format: str = "TYPE='JSON', STRIP_OUTER_ARRAY=TRUE",
     file: str = None,
     pattern: str = None,
+    record_filter: str = '',
     overwrite: bool = False,
 ):
     """
@@ -237,7 +237,6 @@ def load_s3_data_to_snowflake(
 
     Args:
       date (str): Date of the data being loaded.
-      date_property (str): Date type property name in the variant `PROPERTIES` column.
       sf_credentials (dict): Snowflake public key credentials in the format required by create_snowflake_connection.
       sf_database (str): Name of the destination database.
       sf_schema (str): Name of the destination schema.
@@ -250,7 +249,9 @@ def load_s3_data_to_snowflake(
       sf_file_format (str, optional): Snowflake file format for the Stage. Defaults to 'JSON'.
       file (str, optional): File path relative to `s3_url`.
       pattern (str, optional): Path pattern/regex to match S3 objects to copy. Defaults to `None`.
-      overwrite (bool, optional): Whether to overwrite existing data for the given date. Defaults to `False`.
+      record_filter (str, optional): Entire `WHERE` clause which specifies the data to overwrite. An empty value
+              with overwrite=True will delete the entire table.
+      overwrite (bool, optional): Whether to overwrite existing data for the given `record_filter`. Defaults to `False`.
     """
     logger = get_logger()
     if not file and not pattern:
@@ -262,11 +263,10 @@ def load_s3_data_to_snowflake(
     try:
         query = """
         SELECT 1 FROM {table}
-        WHERE date(PROPERTIES:{date_property})=date('{date}')
+        {record_filter}
         """.format(
             table=qualified_table_name(sf_database, sf_schema, sf_table),
-            date=date,
-            date_property=date_property,
+            record_filter=record_filter,
         )
 
         logger.info("Checking existence of data for {}".format(date))
@@ -309,11 +309,10 @@ def load_s3_data_to_snowflake(
 
             query = """
             DELETE FROM {table}
-            WHERE date(PROPERTIES:{date_property})=date('{date}')
+            {record_filter}
             """.format(
                 table=qualified_table_name(sf_database, sf_schema, sf_table),
-                date=date,
-                date_property=date_property,
+                record_filter=record_filter,
             )
             sf_connection.cursor().execute(query)
 
