@@ -18,7 +18,7 @@ DEFAULT_RETRY_STATUS_CODES = (
 DEFAULT_TIMEOUT_SECONDS = 7200
 
 
-class EdxApiClient(object):
+class EdxApiClient:
     """
     Simplifies authentication and pagination logic when communicating with Open edX REST APIs.
 
@@ -79,7 +79,7 @@ class EdxApiClient(object):
             data = response.json()
             self._session.auth = SuppliedAuth(data['access_token'], data.get('token_type', self.token_type))
             self._expires_at = now + timedelta(seconds=data['expires_in'])
-            logger.info("Acquired a token that expires at {}".format(self._expires_at.isoformat()))
+            logger.info(f"Acquired a token that expires at {self._expires_at.isoformat()}")
 
     def get(self, url, params=None, timeout_seconds=DEFAULT_TIMEOUT_SECONDS, retry_on=DEFAULT_RETRY_STATUS_CODES):
         """
@@ -197,7 +197,7 @@ class SuppliedAuth(AuthBase):
 
     def __call__(self, r):
         """Update the request headers."""
-        r.headers['Authorization'] = '{token_type} {token}'.format(token_type=self.token_type, token=self.token)
+        r.headers['Authorization'] = f'{self.token_type} {self.token}'
         return r
 
 

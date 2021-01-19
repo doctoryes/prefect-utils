@@ -19,15 +19,12 @@ test_requirements = ['pytest>=3', ]
 setup(
     author="Julia Eskew",
     author_email='jeskew@edx.org',
-    python_requires='>=3.5',
+    python_requires='>=3.8',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
         'Programming Language :: Python :: 3.8',
     ],
     description="Utility code to assist in writing Prefect Flows.",
@@ -46,6 +43,6 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     url='https://github.com/doctoryes/prefect_utils',
-    version='0.1.0',
+    version='1.0.0',
     zip_safe=False,
 )

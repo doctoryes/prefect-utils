@@ -3,11 +3,11 @@
 import json
 from datetime import datetime, timedelta
 from unittest import TestCase
+from unittest.mock import patch
 
 import httpretty
 import requests
 from ddt import data, ddt, unpack
-from mock import patch
 
 from prefect_utils.edx_api_client import EdxApiClient
 

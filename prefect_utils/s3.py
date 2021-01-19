@@ -56,7 +56,7 @@ def write_report_to_s3(download_results: tuple, s3_bucket: str, s3_path: str):
     date, report_str = download_results
     date_path = get_s3_path_for_date(date)
     s3_key = s3_path + date_path
-    logger.info("Writing report to S3 for {} to {}".format(date, s3_key))
+    logger.info(f"Writing report to S3 for {date} to {s3_key}")
 
     s3.S3Upload(bucket=s3_bucket).run(
         report_str,
@@ -68,4 +68,4 @@ def write_report_to_s3(download_results: tuple, s3_bucket: str, s3_path: str):
 
 @task
 def get_s3_url(s3_bucket, s3_path):
-    return 's3://{bucket}/{path}'.format(bucket=s3_bucket, path=s3_path)
+    return f's3://{s3_bucket}/{s3_path}'

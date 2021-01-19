@@ -7,13 +7,12 @@ from collections import OrderedDict
 
 import ciso8601
 import pytz
-import six
 from prefect.utilities.logging import get_logger
 
 DEFAULT_NULL_VALUE = b'\\N'
 
 
-class Record(object):
+class Record:
     """
     Represents a strongly typed record that can be stored in various storage engines and processed by Map Reduce jobs.
 
@@ -105,14 +104,14 @@ class Record(object):
                 self.initialize_field(field_name, val)
                 if field_name in kwargs:
                     raise TypeError(
-                        'Multiple values provided for the same field "{0}": {1} and {2}'.format(
+                        'Multiple values provided for the same field "{}": {} and {}'.format(
                             field_name, repr(val), repr(kwargs[field_name])
                         )
                     )
 
         if len(extra_args) > 0:
             raise TypeError(
-                'Too many positional arguments. Unused args: {0}'.format(', '.join(repr(a) for a in extra_args))
+                'Too many positional arguments. Unused args: {}'.format(', '.join(repr(a) for a in extra_args))
             )
 
         # Now iterate through any remaining fields and try to find them in the keyword arguments.
@@ -128,11 +127,11 @@ class Record(object):
                     missing_fields.append(field_name)
 
         if len(missing_fields) > 0:
-            raise TypeError('Required fields not specified: {0}'.format(', '.join(missing_fields)))
+            raise TypeError('Required fields not specified: {}'.format(', '.join(missing_fields)))
 
         # Raise an error if we found any keyword arguments that weren't mapped to a field.
         if len(kwargs) > 0:
-            raise TypeError('Unknown fields specified: {0}'.format(', '.join(kwargs.keys())))
+            raise TypeError('Unknown fields specified: {}'.format(', '.join(kwargs.keys())))
 
         self._initialized = True
 
@@ -160,13 +159,13 @@ class Record(object):
         if hasattr(self, '_initialized'):
             raise TypeError('Records are intended to be immutable')
         else:
-            super(Record, self).__setattr__(key, value)
+            super().__setattr__(key, value)
 
     def __delattr__(self, item):
         if hasattr(self, '_initialized'):
             raise TypeError('Records are intended to be immutable')
         else:
-            super(Record, self).__delattr__(item)
+            super().__delattr__(item)
 
     def __repr__(self):
         arg_strs = []
@@ -208,7 +207,7 @@ class Record(object):
         """
         # We don't want to read the fields from the parent class, so we use a variable that is private to this
         # class. This format ensures that the scope is constrained to only cls, not its parents or children.
-        class_private_var_name = '_{0}__fields'.format(cls.__name__)
+        class_private_var_name = f'_{cls.__name__}__fields'
         field_dict = getattr(cls, class_private_var_name, None)
         if field_dict is None:
             fields = []
@@ -275,7 +274,7 @@ class Record(object):
 
         return field_values
 
-    def to_separated_values(self, sep=u'\t', string_encoder=None):
+    def to_separated_values(self, sep='\t', string_encoder=None):
         """
         Convert this record to a string with fields delimited by `sep`.
 
@@ -424,7 +423,7 @@ class SparseRecord(Record):
     set_missing_fields_to_none = True
 
 
-class HiveTsvEncoder(object):
+class HiveTsvEncoder:
 
     def __init__(self, normalize_whitespace=False, **kwargs):
         self.null_value = kwargs.get('null_value', DEFAULT_NULL_VALUE)
@@ -446,7 +445,7 @@ class HiveTsvEncoder(object):
             return encoded_string.decode('utf8')
 
 
-class Field(object):
+class Field:
     """
     Represents a field within a record.
 
@@ -496,7 +495,7 @@ class Field(object):
 
     def serialize_to_string(self, value):
         """Returns a unicode string representation of a value for this field."""
-        return six.text_type(value)
+        return str(value)
 
     def deserialize_from_string(self, string_value):
         """Returns a typed representation of the value from its string representation."""
@@ -542,7 +541,7 @@ class StringField(Field):  # pylint: disable=abstract-method
             self.truncate = False
 
     def validate(self, value):
-        validation_errors = super(StringField, self).validate(value)
+        validation_errors = super().validate(value)
         if value is not None:
             if not isinstance(value, str):
                 validation_errors.append('The value is not a string')
@@ -556,7 +555,7 @@ class StringField(Field):  # pylint: disable=abstract-method
             value = value[:self.length]
 
         try:
-            return six.text_type(value, encoding=getattr(self, 'encoding', 'utf8'))
+            return str(value, encoding=getattr(self, 'encoding', 'utf8'))
         except TypeError:
             # It's already a unicode string
             return value
@@ -564,7 +563,7 @@ class StringField(Field):  # pylint: disable=abstract-method
     @property
     def sql_base_type(self):
         if self.length:
-            return 'VARCHAR({length})'.format(length=self.length)
+            return f'VARCHAR({self.length})'
         else:
             return 'VARCHAR'
 
@@ -589,7 +588,7 @@ class DelimitedStringField(Field):
 
     def validate(self, value):
         """Accepts tuple values."""
-        validation_errors = super(DelimitedStringField, self).validate(value)
+        validation_errors = super().validate(value)
         if not(value is None or isinstance(value, tuple)):
             validation_errors.append('The value is not a tuple')
         return validation_errors
@@ -616,7 +615,7 @@ class BooleanField(Field):
 
     def validate(self, value):
         """Accepts boolean values."""
-        validation_errors = super(BooleanField, self).validate(value)
+        validation_errors = super().validate(value)
         if not(value is None or isinstance(value, bool)):
             validation_errors.append('The value is not a bool')
         return validation_errors
@@ -629,7 +628,7 @@ class IntegerField(Field):  # pylint: disable=abstract-method
     elasticsearch_type = 'integer'
 
     def validate(self, value):
-        validation_errors = super(IntegerField, self).validate(value)
+        validation_errors = super().validate(value)
         if value is not None and not isinstance(value, int):
             validation_errors.append('The value is not an integer')
         return validation_errors
@@ -646,7 +645,7 @@ class DateField(Field):  # pylint: disable=abstract-method
     elasticsearch_type = 'date'
 
     def validate(self, value):
-        validation_errors = super(DateField, self).validate(value)
+        validation_errors = super().validate(value)
         if value is not None and not isinstance(value, datetime.date):
             validation_errors.append('The value is not a date')
         return validation_errors
@@ -684,7 +683,7 @@ class DateTimeField(Field):  # pylint: disable=abstract-method
     utc_tz = TzUtc()
 
     def validate(self, value):
-        validation_errors = super(DateTimeField, self).validate(value)
+        validation_errors = super().validate(value)
         if value is None:
             pass
         elif not isinstance(value, datetime.datetime):
@@ -722,7 +721,7 @@ class FloatField(Field):  # pylint: disable=abstract-method
     elasticsearch_type = 'float'
 
     def validate(self, value):
-        validation_errors = super(FloatField, self).validate(value)
+        validation_errors = super().validate(value)
         if value is not None:
             try:
                 float(value)
@@ -734,7 +733,7 @@ class FloatField(Field):  # pylint: disable=abstract-method
         return float(string_value)
 
 
-class RecordMapper(object):
+class RecordMapper:
     """
     Load a record from a dictionary object, according to a given mapping.
 
@@ -793,7 +792,7 @@ class RecordMapper(object):
                 # TODO: this should really check to see if the record_field is nullable.
                 value = None
             else:
-                value = backslash_encode_value(six.text_type(obj))
+                value = backslash_encode_value(str(obj))
                 if '\x00' in value:
                     value = value.replace('\x00', '\\0')
                 # Avoid validation errors later due to length by truncating here.
@@ -805,7 +804,7 @@ class RecordMapper(object):
                         "Record value length (%d) exceeds max length (%d) for field %s: %r",
                         value_length, field_length, record_key, value
                     )
-                    value = u"{}...".format(value[:field_length - 4])
+                    value = "{}...".format(value[:field_length - 4])
             record_dict[record_key] = value
         elif isinstance(record_field, IntegerField):
             try:
@@ -857,7 +856,7 @@ class RecordMapper(object):
             for key in obj.keys():
                 new_value = obj.get(key)
                 # Normalize labels to be all lower-case, since all field (column) names are lowercased.
-                new_label = u"{}.{}".format(label, key.lower())
+                new_label = f"{label}.{key.lower()}"
                 self._add_info_recurse(record_dict, record_mapping, new_value, new_label)
         elif isinstance(obj, list):
             # We will not output any values that are stored in lists.

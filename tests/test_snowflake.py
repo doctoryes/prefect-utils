@@ -4,7 +4,8 @@
 Tests for Snowflake utils in the `prefect_utils` package.
 """
 
-import mock
+from unittest import mock
+
 import pytest
 from prefect.core import Flow
 from prefect.engine import signals

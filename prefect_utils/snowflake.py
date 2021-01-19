@@ -48,7 +48,7 @@ def create_snowflake_connection(
     )
 
     # Switch to specified role.
-    connection.cursor().execute("USE ROLE {}".format(role))
+    connection.cursor().execute(f"USE ROLE {role}")
     # Set timezone to UTC
     connection.cursor().execute("ALTER SESSION SET TIMEZONE = 'UTC'")
 
@@ -262,7 +262,7 @@ def load_s3_data_to_snowflake(
 
     if truncate:
         query = "TRUNCATE IF EXISTS {}".format(qualified_table_name(sf_database, sf_schema, sf_table))
-        logger.info("Truncating table: {}".format(sf_table))
+        logger.info(f"Truncating table: {sf_table}")
         cursor = sf_connection.cursor()
         cursor.execute(query)
 
@@ -277,7 +277,7 @@ def load_s3_data_to_snowflake(
             date_property=date_property,
         )
 
-        logger.info("Checking existence of data for {}".format(date))
+        logger.info(f"Checking existence of data for {date}")
 
         cursor = sf_connection.cursor()
         cursor.execute(query)
@@ -292,7 +292,7 @@ def load_s3_data_to_snowflake(
     if row and not overwrite:
         raise signals.SKIP('Skipping task as data for the date exists and no overwrite was provided.')
     else:
-        logger.info("Continuing with S3 load for {}".format(date))
+        logger.info(f"Continuing with S3 load for {date}")
 
     try:
         # Create the generic loading table
@@ -313,7 +313,7 @@ def load_s3_data_to_snowflake(
 
         # Delete existing data in case of overwrite.
         if overwrite and row:
-            logger.info("Deleting data for overwrite for {}".format(date))
+            logger.info(f"Deleting data for overwrite for {date}")
 
             query = """
             DELETE FROM {table}
@@ -343,12 +343,12 @@ def load_s3_data_to_snowflake(
         pattern_parameter = ""
 
         if file:
-            logger.info("Loading file {}".format(file))
-            files_paramater = "FILES = ( '{}' )".format(file)
+            logger.info(f"Loading file {file}")
+            files_paramater = f"FILES = ( '{file}' )"
 
         if pattern:
-            logger.info("Loading pattern {}".format(pattern))
-            pattern_parameter = "PATTERN = '{}'".format(pattern)
+            logger.info(f"Loading pattern {pattern}")
+            pattern_parameter = f"PATTERN = '{pattern}'"
 
         query = """
         COPY INTO {table} (origin_file_name, origin_file_line, origin_str, properties)
@@ -374,7 +374,7 @@ def load_s3_data_to_snowflake(
             force=str(overwrite),
         )
 
-        logger.info("Copying data into Snowflake as: \n{}".format(query))
+        logger.info(f"Copying data into Snowflake as: \n{query}")
 
         sf_connection.cursor().execute(query)
         sf_connection.commit()

@@ -4,10 +4,9 @@ from decimal import Decimal
 from io import BytesIO
 
 import requests
-import six
 
 
-class PaypalApiResponse(object):
+class PaypalApiResponse:
     """
     A generic API response. All API responses include the "baseResponse" element which is parsed by this class so any
     children overriding `params_from_xml` are expected to call this class.
@@ -106,7 +105,7 @@ def find_or_raise(node, child_name):
     child = node.find(child_name)
     if child is None:
         raise PaypalMalformedResponseError(
-            'The required element "{}" was not found in the API response'.format(child_name), node
+            f'The required element "{child_name}" was not found in the API response', node
         )
     return child
 
@@ -130,7 +129,7 @@ def find_text_or_raise(node, child_name):
     text = node.findtext(child_name)
     if text is None:
         raise PaypalMalformedResponseError(
-            'The required element "{}" was not found in the API response'.format(child_name), node
+            f'The required element "{child_name}" was not found in the API response', node
         )
     return text
 
@@ -144,7 +143,7 @@ class PaypalApiRequestFailedError(PaypalError):
     """Paypal responded with an error code specifying a generic failure with processing the request."""
 
     def __init__(self, response_code, response_message, request_type="API"):
-        super(PaypalApiRequestFailedError, self).__init__(
+        super().__init__(
             'Paypal {request_type} request failed with code {code}: {message}'.format(
                 request_type=request_type,
                 code=response_code,
@@ -159,15 +158,15 @@ class PaypalMalformedResponseError(PaypalError):
     def __init__(self, message, root_node=None):
         with_tree = message
         if root_node:
-            with_tree = u'{}:{}'.format(
+            with_tree = '{}:{}'.format(
                 message,
                 ET.tostring(root_node, encoding='UTF-8', method='xml').decode('utf-8'),
             )
 
-        super(PaypalMalformedResponseError, self).__init__(with_tree)
+        super().__init__(with_tree)
 
 
-class PaypalApiRequest(object):
+class PaypalApiRequest:
     """
     A generic API request. Subclasses are expected to override `append_request_node` to specify the details of the
     particular request in question.
@@ -209,7 +208,7 @@ class PaypalApiRequest(object):
 
         for attribute in ('user', 'vendor', 'partner', 'password'):
             child_node = ET.SubElement(auth_node, attribute)
-            child_node.text = six.text_type(getattr(self, attribute))
+            child_node.text = str(getattr(self, attribute))
 
     def append_request_node(self, root_node):
         """Inject the request-specific elements into the request."""
@@ -253,7 +252,7 @@ class PaypalReportResponse(PaypalApiResponse):
     REPORT_COMPLETE_STATUS_CODE = 3
 
     def __init__(self, response_code, response_message, report_id, status_code, status_message):
-        super(PaypalReportResponse, self).__init__(response_code, response_message)
+        super().__init__(response_code, response_message)
         self.report_id = report_id
         self.status_code = status_code
         self.status_message = status_message
@@ -290,7 +289,7 @@ class PaypalReportResponse(PaypalApiResponse):
 
     def raise_for_status(self):
         """Raise an error if the report failed to execute on the backend."""
-        super(PaypalReportResponse, self).raise_for_status()
+        super().raise_for_status()
         if self.status_code > self.REPORT_COMPLETE_STATUS_CODE:
             raise PaypalApiRequestFailedError(self.status_code, self.status_message, "report")
 
@@ -310,7 +309,7 @@ class PaypalReportRequest(PaypalApiRequest):
     RESPONSE_CLASS = PaypalReportResponse
 
     def __init__(self, report_name, partner, vendor, password, user, url, **report_params):
-        super(PaypalReportRequest, self).__init__(partner, vendor, password, user, url)
+        super().__init__(partner, vendor, password, user, url)
         self.report_name = report_name
         self.report_params = report_params
         self.page_size = self.report_params.pop('page_size', self.DEFAULT_PAGE_SIZE)
@@ -320,17 +319,17 @@ class PaypalReportRequest(PaypalApiRequest):
         # WARNING: the paypal XML parser is position sensitive. Do NOT change the ordering of the fields in the request.
         request_node = ET.SubElement(root_node, 'runReportRequest')
         name_node = ET.SubElement(request_node, 'reportName')
-        name_node.text = six.text_type(self.report_name)
+        name_node.text = str(self.report_name)
 
-        for param_name, param_value in six.iteritems(self.report_params):
+        for param_name, param_value in self.report_params.items():
             param_node = ET.SubElement(request_node, 'reportParam')
             param_name_node = ET.SubElement(param_node, 'paramName')
-            param_name_node.text = six.text_type(param_name)
+            param_name_node.text = str(param_name)
             param_value_node = ET.SubElement(param_node, 'paramValue')
-            param_value_node.text = six.text_type(param_value)
+            param_value_node.text = str(param_value)
 
         page_size_node = ET.SubElement(request_node, 'pageSize')
-        page_size_node.text = six.text_type(self.page_size)
+        page_size_node.text = str(self.page_size)
 
 
 ColumnMetadata = namedtuple('ColumnMetadata', ('name', 'data_type'))  # pylint: disable=invalid-name
@@ -350,7 +349,7 @@ class PaypalReportMetadataResponse(PaypalApiResponse):
     """
 
     def __init__(self, response_code, response_message, num_rows, num_pages, page_size, columns):
-        super(PaypalReportMetadataResponse, self).__init__(response_code, response_message)
+        super().__init__(response_code, response_message)
         self.num_rows = num_rows
         self.num_pages = num_pages
         self.page_size = page_size
@@ -386,13 +385,13 @@ class PaypalReportMetadataRequest(PaypalApiRequest):
     RESPONSE_CLASS = PaypalReportMetadataResponse
 
     def __init__(self, report_id, partner, vendor, password, user, url):
-        super(PaypalReportMetadataRequest, self).__init__(partner, vendor, password, user, url)
+        super().__init__(partner, vendor, password, user, url)
         self.report_id = report_id
 
     def append_request_node(self, root_node):
         request_node = ET.SubElement(root_node, 'getMetaDataRequest')
         report_id_node = ET.SubElement(request_node, 'reportId')
-        report_id_node.text = six.text_type(self.report_id)
+        report_id_node.text = str(self.report_id)
 
 
 class PaypalReportDataResponse(PaypalApiResponse):
@@ -406,7 +405,7 @@ class PaypalReportDataResponse(PaypalApiResponse):
     """
 
     def __init__(self, response_code, response_message, rows):
-        super(PaypalReportDataResponse, self).__init__(response_code, response_message)
+        super().__init__(response_code, response_message)
         self.rows = rows
 
     @classmethod
@@ -439,16 +438,16 @@ class PaypalReportDataRequest(PaypalApiRequest):
     RESPONSE_CLASS = PaypalReportDataResponse
 
     def __init__(self, report_id, page_num, partner, vendor, password, user, url):
-        super(PaypalReportDataRequest, self).__init__(partner, vendor, password, user, url)
+        super().__init__(partner, vendor, password, user, url)
         self.report_id = report_id
         self.page_num = page_num
 
     def append_request_node(self, root_node):
         request_node = ET.SubElement(root_node, 'getDataRequest')
         report_id_node = ET.SubElement(request_node, 'reportId')
-        report_id_node.text = six.text_type(self.report_id)
+        report_id_node.text = str(self.report_id)
         page_num_node = ET.SubElement(request_node, 'pageNum')
-        page_num_node.text = six.text_type(self.page_num)
+        page_num_node.text = str(self.page_num)
 
 
 class PaypalReportResultsRequest(PaypalApiRequest):
@@ -462,13 +461,13 @@ class PaypalReportResultsRequest(PaypalApiRequest):
     RESPONSE_CLASS = PaypalReportResponse
 
     def __init__(self, report_id, partner, vendor, password, user, url):
-        super(PaypalReportResultsRequest, self).__init__(partner, vendor, password, user, url)
+        super().__init__(partner, vendor, password, user, url)
         self.report_id = report_id
 
     def append_request_node(self, root_node):
         request_node = ET.SubElement(root_node, 'getResultsRequest')
         report_id_node = ET.SubElement(request_node, 'reportId')
-        report_id_node.text = six.text_type(self.report_id)
+        report_id_node.text = str(self.report_id)
 
 
 BaseSettlementReportRecord = namedtuple('SettlementReportRecord', [  # pylint: disable=invalid-name
@@ -510,7 +509,7 @@ class SettlementReportRecord(BaseSettlementReportRecord):
         elif self.type == 'Credit':
             return 'refund'
         else:
-            raise TypeError("Unknown transaction type: {0}".format(self.type))
+            raise TypeError(f"Unknown transaction type: {self.type}")
 
     @property
     def decimal_amount(self):
@@ -545,7 +544,7 @@ class PaypalTimeoutError(PaypalError):
     """The requested report did not finish generating in time."""
 
     def __init__(self, start_time):
-        super(PaypalTimeoutError, self).__init__(
+        super().__init__(
             "Aborting since the report did not finish generating within the acceptable time range. Started generation"
             " at {start_time}.".format(
                 start_time=start_time

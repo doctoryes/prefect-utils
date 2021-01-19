@@ -18,12 +18,12 @@ from prefect_utils.paypal_xml import (ColumnMetadata,
 TEST_URL = 'http://test.api/endpoint'
 
 
-class XmlRequestMixin(object):
+class XmlRequestMixin:
 
     SAMPLE_RESPONSE = ''
 
     def setUp(self):
-        super(XmlRequestMixin, self).setUp()
+        super().setUp()
         self.response_xml_root = ET.fromstring(self.SAMPLE_RESPONSE)
 
     def on_post_return_xml(self):
@@ -201,7 +201,7 @@ class TestReportRequest(XmlRequestMixin, TestCase):
 
         report_request = self.create_report_request()
         with self.assertRaisesRegex(
-                PaypalApiRequestFailedError, 'API request failed with code {0}: {1}'.format(
+                PaypalApiRequestFailedError, 'API request failed with code {}: {}'.format(
                     response_code,
                     response_msg
                 )
@@ -229,7 +229,7 @@ class TestReportRequest(XmlRequestMixin, TestCase):
 
         report_request = self.create_report_request()
         with self.assertRaisesRegex(
-                PaypalApiRequestFailedError, 'report request failed with code {0}: {1}'.format(
+                PaypalApiRequestFailedError, 'report request failed with code {}: {}'.format(
                     status_code,
                     status_msg
                 )

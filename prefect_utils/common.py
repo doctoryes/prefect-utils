@@ -7,7 +7,6 @@ import itertools
 import re
 
 import prefect
-import six
 from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import CourseKey
 from prefect import task
@@ -69,4 +68,4 @@ def get_filename_safe_course_id(course_id, replacement_char='_'):
     # The safest characters are A-Z, a-z, 0-9, <underscore>, <period> and <hyphen>.
     # We represent the first four with \w.
     # TODO: Once we support courses with unicode characters, we will need to revisit this.
-    return re.sub(r'[^\w\.\-]', six.text_type(replacement_char), filename)
+    return re.sub(r'[^\w\.\-]', str(replacement_char), filename)

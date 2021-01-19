@@ -93,23 +93,23 @@ def fetch_paypal_report(
         overwrite: bool,
 ):
     logger = prefect.context.get("logger")
-    logger.info("Pulling Paypal report for {}".format(date))
+    logger.info(f"Pulling Paypal report for {date}")
 
     if not overwrite:
         # If we're not overwriting and the file already exists, raise a skip
         date_path = get_s3_path_for_date(date)
         s3_key = s3_path + date_path
 
-        logger.info("Checking for existence of: {}".format(s3_key))
+        logger.info(f"Checking for existence of: {s3_key}")
 
         existing_file = list_object_keys_from_s3.run(s3_bucket, s3_key)
 
         if existing_file:
             raise signals.SKIP(
-                'File {} already exists and we are not overwriting. Skipping.'.format(s3_key)
+                f'File {s3_key} already exists and we are not overwriting. Skipping.'
             )
         else:
-            logger.info("File not found, continuing download for {}.".format(date))
+            logger.info(f"File not found, continuing download for {date}.")
 
     transport = Transport(config.paypal.host, config.paypal.port)
     transport.connect(
@@ -128,6 +128,6 @@ def fetch_paypal_report(
             formatted_report = format_paypal_report(sftp_connection, remote_filename, date)
             return date, formatted_report
         else:
-            raise Exception("Remote File Not found for date: {0}".format(date))
+            raise Exception(f"Remote File Not found for date: {date}")
     finally:
         sftp_connection.close()

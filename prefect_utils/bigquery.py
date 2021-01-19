@@ -40,8 +40,8 @@ def extract_ga_table(project: str, gcp_credentials: dict, dataset: str, date: st
     Runs a BigQuery extraction job, extracting the google analytics' `ga_sessions` table for a
     given date to a location in GCS in gzipped compressed JSON format.
     """
-    table_name = "ga_sessions_{}".format(date)
-    dest_filename = "{}_*.json.gz".format(table_name)
+    table_name = f"ga_sessions_{date}"
+    dest_filename = f"{table_name}_*.json.gz"
     base_extraction_path = os.path.join(output_root, dataset, date)
     destination_uri = os.path.join(base_extraction_path, dest_filename)
 
