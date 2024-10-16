@@ -12,6 +12,7 @@ from opaque_keys import InvalidKeyError
 from opaque_keys.edx.keys import CourseKey
 from prefect import task
 from prefect.engine.results import PrefectResult
+import yaml
 
 
 @task
@@ -110,3 +111,20 @@ def get_filename_safe_course_id(course_id, replacement_char='_'):
     # We represent the first four with \w.
     # TODO: Once we support courses with unicode characters, we will need to revisit this.
     return re.sub(r'[^\w\.\-]', six.text_type(replacement_char), filename)
+
+
+def get_value_from_key(yaml_config_file, key_name):
+    """
+    utility function that returns content of YAML for a given key
+    :param yaml_config_file: YAML file path
+    :param key_name: Name of the key
+    :return: rendered template as unicode string
+    """
+    with open(yaml_config_file, 'r') as config_reader:
+        raw_config = yaml.load(config_reader, Loader=yaml.FullLoader)
+        if key_name not in raw_config.keys():
+            raise Exception(f'Key {key_name} does not exist in file {yaml_config_file}')
+        return raw_config[key_name]
+
+def get_secret(secret_key, file_path):
+    return get_value_from_key(file_path, secret_key)
