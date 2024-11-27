@@ -1,4 +1,3 @@
 # Requirements for running tests in CI
 
-tox<4                     # Virtualenv management for tests, pinned due to following issue https://github.com/tox-dev/tox-pyenv/issues/22
-tox-battery               # Makes tox aware of requirements file changes
+tox                     # Virtualenv management for tests

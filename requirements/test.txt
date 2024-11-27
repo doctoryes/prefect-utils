@@ -6,154 +6,160 @@
 #
 alabaster==0.7.13
     # via sphinx
-argh==0.26.2
+annotated-types==0.6.0
+    # via pydantic
+argh==0.30.4
     # via watchdog
 asn1crypto==1.5.1
     # via
     #   -r requirements/base.txt
-    #   oscrypto
     #   snowflake-connector-python
 atomicwrites==1.4.1
     # via pytest
-attrs==22.2.0
+attrs==23.1.0
     # via pytest
-babel==2.11.0
+babel==2.13.1
     # via sphinx
 backoff==2.2.1
     # via -r requirements/base.txt
-bcrypt==4.0.1
+bcrypt==4.1.1
     # via
     #   -r requirements/base.txt
     #   paramiko
-bleach==6.0.0
-    # via readme-renderer
-boto3==1.26.61
+boto3==1.33.11
     # via
     #   -r requirements/base.txt
     #   prefect
-botocore==1.29.61
+botocore==1.33.11
     # via
     #   -r requirements/base.txt
     #   boto3
     #   s3transfer
 bump2version==0.5.11
     # via -r requirements/test.in
-cachetools==5.3.0
+cachetools==5.3.2
     # via
     #   -r requirements/base.txt
     #   google-auth
-certifi==2022.12.7
+cerberus==1.3.5
+    # via plette
+certifi==2023.11.17
     # via
     #   -r requirements/base.txt
     #   requests
     #   snowflake-connector-python
-cffi==1.15.1
+cffi==1.16.0
     # via
     #   -r requirements/base.txt
     #   cryptography
     #   pynacl
     #   snowflake-connector-python
-charset-normalizer==2.1.1
+charset-normalizer==3.3.2
     # via
     #   -r requirements/base.txt
     #   requests
     #   snowflake-connector-python
-ciso8601==2.3.0
+ciso8601==2.3.1
     # via -r requirements/base.txt
-click==8.1.3
+click==8.1.7
     # via
     #   -r requirements/base.txt
     #   dask
     #   distributed
     #   prefect
-cloudpickle==2.2.1
+cloudpickle==3.0.0
     # via
     #   -r requirements/base.txt
     #   dask
     #   distributed
     #   prefect
-croniter==1.3.8
+croniter==2.0.1
     # via
     #   -r requirements/base.txt
     #   prefect
-cryptography==39.0.0
+cryptography==41.0.7
     # via
     #   -r requirements/base.txt
     #   paramiko
     #   pyopenssl
     #   snowflake-connector-python
-dask==2023.1.1
+dask==2023.3.1
     # via
     #   -r requirements/base.txt
     #   distributed
     #   prefect
-ddt==1.6.0
+ddt==1.7.0
     # via -r requirements/test.in
-distributed==2023.1.1
+distlib==0.3.7
+    # via requirementslib
+distributed==2023.3.1
     # via
     #   -r requirements/base.txt
     #   prefect
-docker==6.0.1
+docker==7.0.0
     # via
     #   -r requirements/base.txt
     #   prefect
-docutils==0.19
+docopt==0.6.2
+    # via pipreqs
+docutils==0.20.1
     # via
     #   readme-renderer
     #   sphinx
-edx-opaque-keys==2.3.0
+edx-opaque-keys==2.5.1
     # via -r requirements/base.txt
 entrypoints==0.3
     # via flake8
-filelock==3.9.0
+filelock==3.13.1
     # via
     #   -r requirements/base.txt
     #   snowflake-connector-python
 flake8==3.7.8
     # via -r requirements/test.in
-fsspec==2023.1.0
+fsspec==2023.12.1
     # via
     #   -r requirements/base.txt
     #   dask
-google-api-core[grpc]==2.11.0
+google-api-core[grpc]==2.15.0
     # via
     #   -r requirements/base.txt
+    #   google-api-core
     #   google-cloud-aiplatform
     #   google-cloud-bigquery
     #   google-cloud-core
     #   google-cloud-resource-manager
     #   google-cloud-secret-manager
     #   google-cloud-storage
-google-auth==2.16.0
+google-auth==2.25.2
     # via
     #   -r requirements/base.txt
     #   google-api-core
     #   google-cloud-core
     #   google-cloud-storage
     #   prefect
-google-cloud-aiplatform==1.21.0
+google-cloud-aiplatform==1.37.0
     # via
     #   -r requirements/base.txt
     #   prefect
-google-cloud-bigquery==3.4.2
+google-cloud-bigquery==3.13.0
     # via
     #   -r requirements/base.txt
     #   google-cloud-aiplatform
     #   prefect
-google-cloud-core==2.3.2
+google-cloud-core==2.4.1
     # via
     #   -r requirements/base.txt
     #   google-cloud-bigquery
     #   google-cloud-storage
-google-cloud-resource-manager==1.8.1
+google-cloud-resource-manager==1.11.0
     # via
     #   -r requirements/base.txt
     #   google-cloud-aiplatform
-google-cloud-secret-manager==2.15.1
+google-cloud-secret-manager==2.17.0
     # via
     #   -r requirements/base.txt
     #   prefect
-google-cloud-storage==2.7.0
+google-cloud-storage==2.13.0
     # via
     #   -r requirements/base.txt
     #   google-cloud-aiplatform
@@ -161,28 +167,30 @@ google-cloud-storage==2.7.0
 google-crc32c==1.5.0
     # via
     #   -r requirements/base.txt
+    #   google-cloud-storage
     #   google-resumable-media
-google-resumable-media==2.4.1
+google-resumable-media==2.6.0
     # via
     #   -r requirements/base.txt
     #   google-cloud-bigquery
     #   google-cloud-storage
-googleapis-common-protos[grpc]==1.58.0
+googleapis-common-protos[grpc]==1.62.0
     # via
     #   -r requirements/base.txt
     #   google-api-core
+    #   googleapis-common-protos
     #   grpc-google-iam-v1
     #   grpcio-status
 graphviz==0.20.1
     # via
     #   -r requirements/base.txt
     #   prefect
-grpc-google-iam-v1==0.12.6
+grpc-google-iam-v1==0.13.0
     # via
     #   -r requirements/base.txt
     #   google-cloud-resource-manager
     #   google-cloud-secret-manager
-grpcio==1.51.1
+grpcio==1.60.0
     # via
     #   -r requirements/base.txt
     #   google-api-core
@@ -190,19 +198,15 @@ grpcio==1.51.1
     #   googleapis-common-protos
     #   grpc-google-iam-v1
     #   grpcio-status
-grpcio-status==1.51.1
+grpcio-status==1.60.0
     # via
     #   -r requirements/base.txt
     #   google-api-core
-heapdict==1.0.1
-    # via
-    #   -r requirements/base.txt
-    #   zict
 httpretty==1.0.5
     # via -r requirements/test.in
-hvac==1.0.2
+hvac==2.0.0
     # via -r requirements/base.txt
-idna==3.4
+idna==3.6
     # via
     #   -r requirements/base.txt
     #   requests
@@ -213,11 +217,11 @@ importlib-metadata==1.7.0
     # via
     #   -r requirements/base.txt
     #   pytest
-importlib-resources==5.10.2
+importlib-resources==6.1.1
     # via
     #   -r requirements/base.txt
     #   prefect
-isort==5.12.0
+isort==5.13.0
     # via -r requirements/test.in
 jinja2==3.1.2
     # via
@@ -234,11 +238,11 @@ locket==1.0.0
     #   -r requirements/base.txt
     #   distributed
     #   partd
-markupsafe==2.1.2
+markupsafe==2.1.3
     # via
     #   -r requirements/base.txt
     #   jinja2
-marshmallow==3.19.0
+marshmallow==3.20.1
     # via
     #   -r requirements/base.txt
     #   marshmallow-oneofschema
@@ -249,26 +253,28 @@ marshmallow-oneofschema==3.0.1
     #   prefect
 mccabe==0.6.1
     # via flake8
-mock==5.0.1
+mock==5.1.0
     # via -r requirements/test.in
-more-itertools==9.0.0
+more-itertools==10.1.0
     # via pytest
-msgpack==1.0.4
+msgpack==1.0.7
     # via
     #   -r requirements/base.txt
     #   distributed
     #   prefect
-mypy-extensions==0.4.3
+mypy-extensions==1.0.0
     # via
     #   -r requirements/base.txt
     #   prefect
 mysql-connector-python==8.0.21
     # via -r requirements/base.txt
-oscrypto==1.3.0
+nh3==0.2.15
+    # via readme-renderer
+numpy==1.24.4
     # via
     #   -r requirements/base.txt
-    #   snowflake-connector-python
-packaging==21.3
+    #   shapely
+packaging==23.2
     # via
     #   -r requirements/base.txt
     #   dask
@@ -279,16 +285,17 @@ packaging==21.3
     #   marshmallow
     #   prefect
     #   pytest
+    #   snowflake-connector-python
     #   sphinx
-paramiko==3.0.0
+paramiko==3.3.1
     # via -r requirements/base.txt
-partd==1.3.0
+partd==1.4.1
     # via
     #   -r requirements/base.txt
     #   dask
 pathtools==0.1.2
     # via watchdog
-pbr==5.11.1
+pbr==6.0.0
     # via
     #   -r requirements/base.txt
     #   stevedore
@@ -296,20 +303,35 @@ pendulum==2.1.2
     # via
     #   -r requirements/base.txt
     #   prefect
+pep517==0.13.1
+    # via requirementslib
+pip-api==0.0.30
+    # via isort
+pipreqs==0.4.13
+    # via isort
 pkginfo==1.9.6
     # via twine
+platformdirs==3.11.0
+    # via
+    #   -r requirements/base.txt
+    #   requirementslib
+    #   snowflake-connector-python
+plette[validation]==0.4.4
+    # via requirementslib
 pluggy==0.13.1
     # via pytest
 prefect[aws,google,snowflake,viz]==1.4.1
-    # via -r requirements/base.txt
-proto-plus==1.22.2
+    # via
+    #   -r requirements/base.txt
+    #   prefect
+proto-plus==1.23.0
     # via
     #   -r requirements/base.txt
     #   google-cloud-aiplatform
     #   google-cloud-bigquery
     #   google-cloud-resource-manager
     #   google-cloud-secret-manager
-protobuf==4.21.12
+protobuf==4.25.1
     # via
     #   -r requirements/base.txt
     #   google-api-core
@@ -322,18 +344,18 @@ protobuf==4.21.12
     #   grpcio-status
     #   mysql-connector-python
     #   proto-plus
-psutil==5.9.4
+psutil==5.9.6
     # via
     #   -r requirements/base.txt
     #   distributed
 py==1.11.0
     # via pytest
-pyasn1==0.4.8
+pyasn1==0.5.1
     # via
     #   -r requirements/base.txt
     #   pyasn1-modules
     #   rsa
-pyasn1-modules==0.2.8
+pyasn1-modules==0.3.0
     # via
     #   -r requirements/base.txt
     #   google-auth
@@ -343,21 +365,17 @@ pycparser==2.21
     # via
     #   -r requirements/base.txt
     #   cffi
-pycryptodomex==3.17
-    # via
-    #   -r requirements/base.txt
-    #   snowflake-connector-python
+pydantic==2.5.2
+    # via requirementslib
+pydantic-core==2.14.5
+    # via pydantic
 pyflakes==2.1.1
     # via flake8
-pygments==2.14.0
+pygments==2.17.2
     # via
     #   readme-renderer
     #   sphinx
-pyhcl==0.4.4
-    # via
-    #   -r requirements/base.txt
-    #   hvac
-pyjwt==2.6.0
+pyjwt==2.8.0
     # via
     #   -r requirements/base.txt
     #   snowflake-connector-python
@@ -369,14 +387,10 @@ pynacl==1.5.0
     # via
     #   -r requirements/base.txt
     #   paramiko
-pyopenssl==23.0.0
+pyopenssl==23.3.0
     # via
     #   -r requirements/base.txt
     #   snowflake-connector-python
-pyparsing==3.0.9
-    # via
-    #   -r requirements/base.txt
-    #   packaging
 pytest==4.6.5
     # via
     #   -r requirements/test.in
@@ -385,7 +399,7 @@ pytest-mock==3.1.1
     # via -r requirements/test.in
 pytest-runner==5.1
     # via -r requirements/test.in
-python-box==6.1.0
+python-box==7.1.1
     # via
     #   -r requirements/base.txt
     #   prefect
@@ -397,30 +411,31 @@ python-dateutil==2.8.2
     #   google-cloud-bigquery
     #   pendulum
     #   prefect
-python-slugify==8.0.0
+python-slugify==8.0.1
     # via
     #   -r requirements/base.txt
     #   prefect
-pytz==2022.7.1
+pytz==2023.3.post1
     # via
     #   -r requirements/base.txt
     #   babel
+    #   croniter
     #   prefect
     #   snowflake-connector-python
 pytzdata==2020.1
     # via
     #   -r requirements/base.txt
     #   pendulum
-pyyaml==6.0
+pyyaml==6.0.1
     # via
     #   -r requirements/base.txt
     #   dask
     #   distributed
     #   prefect
     #   watchdog
-readme-renderer==37.3
+readme-renderer==42.0
     # via twine
-requests==2.28.2
+requests==2.31.0
     # via
     #   -r requirements/base.txt
     #   docker
@@ -430,34 +445,36 @@ requests==2.28.2
     #   hvac
     #   prefect
     #   requests-toolbelt
+    #   requirementslib
     #   snowflake-connector-python
     #   sphinx
     #   twine
-requests-toolbelt==0.10.1
+    #   yarg
+requests-toolbelt==1.0.0
     # via twine
+requirementslib==3.0.0
+    # via isort
 rsa==4.9
     # via
     #   -r requirements/base.txt
     #   google-auth
-s3transfer==0.6.0
+s3transfer==0.8.2
     # via
     #   -r requirements/base.txt
     #   boto3
-shapely==1.8.5.post1
+shapely==2.0.2
     # via
     #   -r requirements/base.txt
     #   google-cloud-aiplatform
 six==1.16.0
     # via
     #   -r requirements/base.txt
-    #   bleach
-    #   google-auth
     #   pytest
     #   python-dateutil
     #   sphinx
 snowballstemmer==2.2.0
     # via sphinx
-snowflake-connector-python==3.0.0
+snowflake-connector-python==3.6.0
     # via
     #   -r requirements/base.txt
     #   prefect
@@ -465,13 +482,14 @@ sortedcontainers==2.4.0
     # via
     #   -r requirements/base.txt
     #   distributed
+    #   snowflake-connector-python
 sphinx==1.8.5
     # via -r requirements/test.in
 sphinxcontrib-serializinghtml==1.1.5
     # via sphinxcontrib-websupport
 sphinxcontrib-websupport==1.2.4
     # via sphinx
-stevedore==4.1.1
+stevedore==5.1.0
     # via
     #   -r requirements/base.txt
     #   edx-opaque-keys
@@ -479,7 +497,7 @@ tabulate==0.9.0
     # via
     #   -r requirements/base.txt
     #   prefect
-tblib==1.7.0
+tblib==3.0.0
     # via
     #   -r requirements/base.txt
     #   distributed
@@ -491,25 +509,37 @@ toml==0.10.2
     # via
     #   -r requirements/base.txt
     #   prefect
+tomli==2.0.1
+    # via pep517
+tomlkit==0.12.3
+    # via
+    #   -r requirements/base.txt
+    #   plette
+    #   requirementslib
+    #   snowflake-connector-python
 toolz==0.12.0
     # via
     #   -r requirements/base.txt
     #   dask
     #   distributed
     #   partd
-tornado==6.2
+tornado==6.4
     # via
     #   -r requirements/base.txt
     #   distributed
-tqdm==4.64.1
+tqdm==4.66.1
     # via twine
 twine==1.14.0
     # via -r requirements/test.in
-typing-extensions==4.4.0
+typing-extensions==4.9.0
     # via
     #   -r requirements/base.txt
+    #   annotated-types
+    #   edx-opaque-keys
+    #   pydantic
+    #   pydantic-core
     #   snowflake-connector-python
-urllib3==1.26.14
+urllib3==1.26.18
     # via
     #   -r requirements/base.txt
     #   botocore
@@ -520,25 +550,22 @@ urllib3==1.26.14
     #   snowflake-connector-python
 watchdog==0.9.0
     # via -r requirements/test.in
-wcwidth==0.2.6
+wcwidth==0.2.12
     # via pytest
-webencodings==0.5.1
-    # via bleach
-websocket-client==1.5.0
-    # via
-    #   -r requirements/base.txt
-    #   docker
 wheel==0.33.6
     # via -r requirements/test.in
-zict==2.2.0
+yarg==0.1.9
+    # via pipreqs
+zict==3.0.0
     # via
     #   -r requirements/base.txt
     #   distributed
-zipp==3.12.0
+zipp==3.17.0
     # via
     #   -r requirements/base.txt
     #   importlib-metadata
     #   importlib-resources
 
 # The following packages are considered to be unsafe in a requirements file:
+# pip
 # setuptools
